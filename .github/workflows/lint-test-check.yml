@@ -22,4 +22,4 @@ jobs:
           coverageCommand: make test-coverage
           coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
           debug: true
-19 changes: 19 additions & 0 deletions
+
