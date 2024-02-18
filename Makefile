@@ -14,6 +14,8 @@ setup:
 
 	npm ci
 
+	npm run build
+
 start:
 	php artisan serve
 
