@@ -1,4 +1,11 @@
 
+setup:
+	composer install
+
+	touch database/database.sqlite
+
+	cp -n .env.example .env || true
+
 start:
 	php artisan serve
 
