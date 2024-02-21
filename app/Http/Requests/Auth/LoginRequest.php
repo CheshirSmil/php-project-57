@@ -33,6 +33,21 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'password.required' => 'Это обязательное поле',
+            'password.min' => 'Пароль должен иметь длину не менее 8 символов',
+            'email.max' => 'Email должен иметь длину не более 255 символов',
+            'email.required' => 'Это обязательное поле',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException
