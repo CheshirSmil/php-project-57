@@ -2,15 +2,16 @@
 
 namespace App\Mail;
 
-use Illuminate\Mail\Mailables\Address;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 
-class OrderShipped extends Mailable
+class NewRegistration extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -18,9 +19,10 @@ class OrderShipped extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
-    {
-        //
+    public function __construct(
+        public User $user,
+        public $password
+    ) {
     }
 
     /**
@@ -30,7 +32,7 @@ class OrderShipped extends Mailable
     {
         return new Envelope(
             from: new Address('jeffrey@example.com', 'Jeffrey Way'),
-            subject: 'test',
+            subject: 'You have registered in Task Manager',
         );
     }
 
@@ -40,7 +42,7 @@ class OrderShipped extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.test',
+            view: 'emails.new-registration',
         );
     }
 

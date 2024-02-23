@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewRegistration;
 
 class RegisteredUserController extends Controller
 {
@@ -38,6 +40,7 @@ class RegisteredUserController extends Controller
             'name.required' => 'Это обязательное поле',
             'password.min' => 'Пароль должен иметь длину не менее 8 символов',
             'password.confirmed' => 'Пароль и подтверждение не совпадают',
+            'email.unique' => 'Такой email уже зарегистрирован',
             ]);
 
         $user = User::create([
@@ -49,6 +52,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+        Mail::to($user)->send(new NewRegistration($user, $request->password));
 
         return redirect(RouteServiceProvider::HOME);
     }

@@ -17,7 +17,6 @@ use App\Mail\OrderShipped;
 */
 
 Route::get('/', function () {
-    Mail::to('graciadan@rambler.ru')->send(new OrderShipped());
     return view('welcome');
 });
 
