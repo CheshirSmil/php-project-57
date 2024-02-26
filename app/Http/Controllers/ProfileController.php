@@ -34,6 +34,8 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        session()->flash('message', 'Profile info successfully updated');
+
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
@@ -44,6 +46,9 @@ class ProfileController extends Controller
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
+        ], [
+            'password.required' => 'Поле: "Пароль" не может быть пустым',
+            'password.current_password' => 'Введеный пароль недействительный',
         ]);
 
         $user = $request->user();
@@ -54,6 +59,8 @@ class ProfileController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        session()->flash('message', 'Profile deleted successfully');
 
         return Redirect::to('/');
     }
