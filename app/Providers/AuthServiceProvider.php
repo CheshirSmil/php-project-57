@@ -6,7 +6,6 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use App\Models\TaskStatus;
 use App\Policies\TaskStatusPolicy;
 
-
 class AuthServiceProvider extends ServiceProvider
 {
     /**
