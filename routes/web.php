@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
+use App\Http\Controllers\TaskStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use App\Mail\OrderShipped;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('main');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -31,3 +32,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+Route::resource('task_statuses', TaskStatusController::class);
