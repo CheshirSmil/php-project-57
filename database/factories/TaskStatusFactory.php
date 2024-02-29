@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TaskStatus>
@@ -18,7 +19,7 @@ class TaskStatusFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'creator_id' => fake()->randomDigit(),
+            'creator_id' => User::find(rand(1, count(User::all()))),
         ];
     }
 }
