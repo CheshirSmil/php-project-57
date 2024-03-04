@@ -66,8 +66,7 @@ class TaskStatusController extends Controller
     {
         $data = $request->validated();
 
-        $taskStatus->fill($data);
-        $taskStatus->save();
+        $taskStatus->fill($data)->save();
 
         session()->flash('message', 'Status edited successfully');
 

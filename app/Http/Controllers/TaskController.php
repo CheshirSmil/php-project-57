@@ -80,8 +80,7 @@ class TaskController extends Controller
     {
         $data = $request->validated();
 
-        $task->fill($data);
-        $task->save();
+        $task->fill($data)->save();
 
         session()->flash('message', 'Task edited successfully');
 
