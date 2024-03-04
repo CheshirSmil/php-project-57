@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Models\TaskStatus;
+use App\Models\Task;
 use App\Policies\TaskStatusPolicy;
+use App\Policies\TaskPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         TaskStatus::class => TaskStatusPolicy::class,
+        Task::class => TaskPolicy::class,
     ];
 
     /**
