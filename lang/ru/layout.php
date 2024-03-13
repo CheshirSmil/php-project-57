@@ -90,7 +90,7 @@ return [
     //'create_button_task' => 'Создать задачу',
     'dashboard' => 'Панель управления',
     'profile_welcome' => 'Вы вошли в свой профиль',
-    //'welcome_button' => 'Нажми меня',
+    'welcome_button' => 'Нажми меня',
     'profile' => 'Профиль',
     'main' => 'Главная',
     'profile_info' => 'Информация профиля',
