@@ -19,7 +19,7 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->sentence(),
+            'name' => fake()->unique()->name(),
             'description' => fake()->text(100),
             'status_id' => TaskStatus::pluck('id')->random(),
             'created_by_id' => User::pluck('id')->random(),
