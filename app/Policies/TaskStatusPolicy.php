@@ -39,7 +39,8 @@ class TaskStatusPolicy
      */
     public function delete(User $user, TaskStatus $taskStatus): bool
     {
-        return Auth::check() && $user->id === $taskStatus->creator_id && empty(Task::firstWhere('status_id', $taskStatus->id));
+        return Auth::check() && $user->id === $taskStatus->creator_id &&
+            empty(Task::firstWhere('status_id', $taskStatus->id));
     }
 
     public function seeActions(User $user): bool

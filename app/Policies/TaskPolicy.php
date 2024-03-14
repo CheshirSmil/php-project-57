@@ -49,7 +49,7 @@ class TaskPolicy
         return Auth::check() && $task->created_by_id ===  $user->id;
     }
 
-    public  function seeActions(User $user): bool
+    public function seeActions(User $user): bool
     {
         return Auth::check();
     }
