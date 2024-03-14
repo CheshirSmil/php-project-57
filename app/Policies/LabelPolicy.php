@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Label;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class LabelPolicy
 {
@@ -13,7 +14,7 @@ class LabelPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +22,7 @@ class LabelPolicy
      */
     public function view(User $user, Label $label): bool
     {
-        //
+        return Auth::check();
     }
 
     /**
@@ -29,7 +30,7 @@ class LabelPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return Auth::check();
     }
 
     /**
@@ -37,7 +38,7 @@ class LabelPolicy
      */
     public function update(User $user, Label $label): bool
     {
-        //
+        return Auth::check();
     }
 
     /**
@@ -45,22 +46,25 @@ class LabelPolicy
      */
     public function delete(User $user, Label $label): bool
     {
-        //
+        return Auth::check() &&
+            empty($label->tasks()->first()) &&
+            $label->created_by_id === $user->id;
     }
 
     /**
      * Determine whether the user can restore the model.
-     */
+
     public function restore(User $user, Label $label): bool
     {
         //
     }
+     */
 
     /**
      * Determine whether the user can permanently delete the model.
      */
     public function forceDelete(User $user, Label $label): bool
     {
-        //
+        return Auth::check();
     }
 }

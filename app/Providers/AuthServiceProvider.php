@@ -7,6 +7,8 @@ use App\Models\TaskStatus;
 use App\Models\Task;
 use App\Policies\TaskStatusPolicy;
 use App\Policies\TaskPolicy;
+use App\Models\Label;
+use App\Policies\LabelPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         TaskStatus::class => TaskStatusPolicy::class,
         Task::class => TaskPolicy::class,
+        Label::class => LabelPolicy::class,
     ];
 
     /**

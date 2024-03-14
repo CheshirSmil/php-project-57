@@ -11,7 +11,7 @@ class UpdateLabelRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateLabelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', "unique:labels,name,{$this->label->id}", 'max:50'],
+            'description' => ['nullable', 'max:255'],
         ];
     }
 }
