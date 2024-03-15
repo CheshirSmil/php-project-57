@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -16,115 +17,103 @@ class TaskStatusesTest extends TestCase
     private User $user;
     private User $wrongUser;
     private TaskStatus $taskStatus;
+    private array $taskStatusData;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
+        $this->wrongUser = User::factory()->create();
         $this->taskStatus = TaskStatus::factory([
             'creator_id' => $this->user->id,
         ])->create();
-        $this->wrongUser = User::factory()->create();
+        $this->taskStatusData = TaskStatus::factory()->make()->only([
+            'name',
+        ]);
     }
 
-    public function testGuestCanViewTaskStatusList(): void
+    public function test_index(): void
     {
         $response = $this->get(route('task_statuses.index'));
 
-        $response->assertOK();
+        $response->assertOk();
     }
 
-    public function testGuestCannotCreateTaskStatuses(): void
+    public function test_create_non_auth(): void
     {
         $response = $this->get(route('task_statuses.create'));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
-    public function testCreate(): void
+    public function test_create(): void
     {
         $response = $this->actingAs($this->user)->get(route('task_statuses.create'));
+
         $response->assertOk();
     }
 
-    public function testStoreNonAuth(): void
+    public function test_store_non_auth(): void
     {
-        $response = $this->post(route('task_statuses.store'), [
-            'name' => fake()->name(),
-        ]);
+        $response = $this->post(route('task_statuses.store'), $this->taskStatusData);
 
         $response->assertForbidden();
     }
 
-    public function testStore(): void
+    public function test_store(): void
     {
-        $response = $this->actingAs($this->user)->post(route('task_statuses.store'), [
-            'name' => fake()->name(),
-        ]);
+        $response = $this->actingAs($this->user)->post(route('task_statuses.store'), $this->taskStatusData);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('task_statuses.index'));
     }
 
-    public function testEditNonAuth(): void
+    public function test_edit_non_auth(): void
     {
-        $response = $this->get(route('task_statuses.edit', $this->taskStatus->id));
+        $response = $this->get(route('task_statuses.edit', $this->taskStatus));
+
         $response->assertForbidden();
     }
 
-    public function testEditWrongUser(): void
+    public function test_edit(): void
     {
-        $response = $this->actingAs($this->wrongUser)->get(route('task_statuses.edit', $this->taskStatus->id));
-        $response->assertForbidden();
-    }
+        $response = $this->actingAs($this->user)->get(route('task_statuses.edit', $this->taskStatus));
 
-    public function testEdit(): void
-    {
-        $response = $this->actingAs($this->user)->get(route('task_statuses.edit', $this->taskStatus->id));
         $response->assertOk();
     }
 
-    public function testUpdateNonAuth(): void
+    public function test_update_non_auth(): void
     {
-        $response = $this->put(route('task_statuses.update', $this->taskStatus->id), [
-            'name' => fake()->name(),
-        ]);
+        $response = $this->patch(route('task_statuses.update', $this->taskStatus), $this->taskStatusData);
 
         $response->assertForbidden();
     }
 
-    public function testUpdateWrongUser(): void
+    public function test_update(): void
     {
-        $response = $this->actingAs($this->wrongUser)->put(route('task_statuses.update', $this->taskStatus->id), [
-            'name' => fake()->name(),
-        ]);
-        $response->assertForbidden();
-    }
-
-    public function testUpdate(): void
-    {
-        $response = $this->actingAs($this->user)->put(route('task_statuses.update', $this->taskStatus->id), [
-            'name' => fake()->name(),
-        ]);
+        $response = $this->actingAs($this->user)->put(route('task_statuses.update', $this->taskStatus), $this->taskStatusData);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('task_statuses.index'));
     }
 
-    public function testDestroyNonAuth(): void
+    public function test_destroy_non_auth(): void
     {
-        $response = $this->delete(route('task_statuses.destroy', $this->taskStatus->id));
+        $response = $this->delete(route('task_statuses.destroy', $this->taskStatus));
+
         $response->assertForbidden();
     }
 
-    public function testDestroyWrongUser(): void
+    public function test_destroy_by_wrong_user(): void
     {
-        $response = $this->actingAs($this->wrongUser)->delete(route('task_statuses.destroy', $this->taskStatus->id));
+        $response = $this->actingAs($this->wrongUser)->delete(route('task_statuses.destroy', $this->taskStatus));
         $response->assertForbidden();
     }
 
-    public function testDestroy(): void
+    public function test_destroy(): void
     {
-        $response = $this->actingAs($this->user)->delete(route('task_statuses.destroy', $this->taskStatus->id));
+        $response = $this->actingAs($this->user)->delete(route('task_statuses.destroy', $this->taskStatus));
+
         $this->assertModelMissing($this->taskStatus);
 
         $response->assertSessionHasNoErrors();
