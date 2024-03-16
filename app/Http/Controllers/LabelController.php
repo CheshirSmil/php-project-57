@@ -9,11 +9,23 @@ use App\Models\Label;
 class LabelController extends Controller
 {
     /**
+     * Create the controller instance.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Label::class, 'label', [
+            'except' => ['index', 'show'],
+        ]);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $labels = Label::orderBy('id', 'asc')->paginate(15);
+
+        return view('labels.index', compact('labels'));
     }
 
     /**
@@ -21,7 +33,9 @@ class LabelController extends Controller
      */
     public function create()
     {
-        //
+        $label = new Label();
+
+        return view('labels.create', compact('label'));
     }
 
     /**
@@ -29,15 +43,15 @@ class LabelController extends Controller
      */
     public function store(StoreLabelRequest $request)
     {
-        //
-    }
+        $data = $request->validated();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Label $label)
-    {
-        //
+        $label = new Label($data);
+        $label->save();
+
+        session()->flash('success', __('layout.label.flash_create_success'));
+
+        return redirect()
+            ->route('labels.index');
     }
 
     /**
@@ -45,7 +59,7 @@ class LabelController extends Controller
      */
     public function edit(Label $label)
     {
-        //
+        return view('labels.edit', compact('label'));
     }
 
     /**
@@ -53,7 +67,14 @@ class LabelController extends Controller
      */
     public function update(UpdateLabelRequest $request, Label $label)
     {
-        //
+        $data = $request->validated();
+
+        $label->fill($data)->save();
+
+        session()->flash('success', __('layout.label.flash_update_success'));
+
+        return redirect()
+            ->route('labels.index');
     }
 
     /**
@@ -61,6 +82,15 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        //
+        if ($label->tasks()->exists()) {
+            session()->flash('error', __('layout.label.flash_delete_fail'));
+            return back();
+        }
+        $label->delete();
+
+        session()->flash('success', __('layout.label.flash_delete_success'));
+
+        return redirect()
+            ->route('labels.index');
     }
 }
