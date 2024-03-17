@@ -55,12 +55,16 @@ return [
         'welcome' => 'Нажми меня',
         'back' => 'Назад',
         'delete' => 'Удалить',
-        'edit' => 'Изменить'
+        'edit' => 'Изменить',
+        'logout' => 'Выйти',
     ],
     'nav' => [
         'task_statuses' => 'Статусы',
         'tasks' => 'Задачи',
-        'labels' => 'Метки'
+        'labels' => 'Метки',
+        'login' => 'Вход',
+        'registration' => 'Регистрация',
+        'logout' => 'Выход',
     ],
     'delete_question' => 'Вы уверены?',
     'title' => 'Менеджер задач',
