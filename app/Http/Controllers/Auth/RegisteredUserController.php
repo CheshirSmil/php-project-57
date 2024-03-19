@@ -14,6 +14,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRegistration;
+use App\Http\Requests\Auth\RegisteredUserRequest;
 
 class RegisteredUserController extends Controller
 {
@@ -30,18 +31,9 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisteredUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255', 'min:1'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', 'min:8', Rules\Password::defaults()],
-        ], [
-            'name.required' => 'Это обязательное поле',
-            'password.min' => 'Пароль должен иметь длину не менее 8 символов',
-            'password.confirmed' => 'Пароль и подтверждение не совпадают',
-            'email.unique' => 'Такой email уже зарегистрирован',
-            ]);
+        $request->validated();
 
         $user = User::create([
             'name' => $request->name,
@@ -52,7 +44,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-        Mail::to($user)->send(new NewRegistration($user, $request->password));
+        //Mail::to($user)->send(new NewRegistration($user, $request->password));
 
         return redirect(RouteServiceProvider::HOME);
     }
