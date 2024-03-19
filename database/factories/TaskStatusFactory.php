@@ -19,7 +19,6 @@ class TaskStatusFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'creator_id' => User::pluck('id')->random(),
         ];
     }
 }

@@ -20,7 +20,6 @@ class LabelFactory extends Factory
         return [
             'name' => fake()->unique()->name(),
             'description' => fake()->text(100),
-            'created_by_id' => User::all()->random(),
         ];
     }
 }
