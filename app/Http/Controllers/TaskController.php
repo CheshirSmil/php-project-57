@@ -71,7 +71,7 @@ class TaskController extends Controller
             $newTask->labels()->attach($data['labels']);
         }
 
-        session()->flash('message', 'New task created successfully');
+        session()->flash('success', 'New task created successfully');
 
         return redirect()
             ->route('tasks.index');
@@ -111,10 +111,10 @@ class TaskController extends Controller
             $task->labels()->detach();
         }
 
-        session()->flash('message', 'Task edited successfully');
+        session()->flash('success', 'Task edited successfully');
 
         return redirect()
-            ->route('tasks.show', $task);
+            ->route('tasks.index');
     }
 
     /**
@@ -125,7 +125,7 @@ class TaskController extends Controller
         $taskName = $task->name;
         $task->delete();
 
-        session()->flash('message', "Task \"{$taskName}\" deleted successfully");
+        session()->flash('success', "Task deleted successfully");
 
         return redirect()
             ->route('tasks.index');

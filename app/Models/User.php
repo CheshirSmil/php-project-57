@@ -45,11 +45,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function taskStatuses(): HasMany
-    {
-        return $this->hasMany(TaskStatus::class, 'creator_id');
-    }
-
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'created_by_id');

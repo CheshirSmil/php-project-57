@@ -43,9 +43,11 @@ class TaskStatusController extends Controller
     public function store(StoreTaskStatusRequest $request)
     {
         $data = $request->validated();
-        $request->user()->taskStatuses()->create($data);
 
-        session()->flash('message', 'New status created successfully');
+        $taskStatus = new TaskStatus($data);
+        $taskStatus->save();
+
+        session()->flash('success', "New status created successfully");
 
         return redirect()
             ->route('task_statuses.index');
@@ -67,7 +69,7 @@ class TaskStatusController extends Controller
         $data = $request->validated();
         $taskStatus->fill($data)->save();
 
-        session()->flash('message', 'Status edited successfully');
+        session()->flash('success', 'Status edited successfully');
 
             return redirect()
                 ->route('task_statuses.index');
@@ -78,10 +80,13 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        $taskStatusName = $taskStatus->name;
+        if (!empty($taskStatus->tasks()->first())) {
+            session()->flash('error', "Не удалось удалить статус");
+            return back();
+        }
         $taskStatus->delete();
 
-        session()->flash('message', "Status \"{$taskStatusName}\" deleted successfully");
+        session()->flash('success', "Status deleted successfully");
 
             return redirect()
                 ->route('task_statuses.index');
