@@ -65,10 +65,17 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $data = $request->validated();
-        $newTask = $request->user()->tasks()->create($data);
+        $task = $request->user()->tasks()->create($data);
 
         if (isset($data['labels'])) {
-            $newTask->labels()->attach($data['labels']);
+            if (in_array(null, $data['labels'], true)) {
+                if (count($data['labels']) > 1) {
+                    unset($data['labels'][array_search(null, $data['labels'], true)]);
+                    $task->labels()->attach($data['labels']);
+                }
+            } else {
+                $task->labels()->attach($data['labels']);
+            }
         }
 
         session()->flash('success', __('layout.task.flash_create_success'));
@@ -106,9 +113,16 @@ class TaskController extends Controller
         $task->fill($data)->save();
 
         if (isset($data['labels'])) {
-            $task->labels()->sync($data['labels']);
-        } else {
-            $task->labels()->detach();
+            if (in_array(null, $data['labels'], true)) {
+                if (count($data['labels']) > 1) {
+                    unset($data['labels'][array_search(null, $data['labels'], true)]);
+                    $task->labels()->sync($data['labels']);
+                } else {
+                    $task->labels()->detach();
+                }
+            } else {
+                $task->labels()->sync($data['labels']);
+            }
         }
 
         session()->flash('success', __('layout.task.flash_update_success'));
@@ -122,7 +136,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $taskName = $task->name;
+        $task->labels()->detach();
         $task->delete();
 
         session()->flash('success', __('layout.task.flash_delete_success'));
