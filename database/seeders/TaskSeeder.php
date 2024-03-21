@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-//use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Label;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\TaskStatus;
@@ -124,7 +122,6 @@ class TaskSeeder extends Seeder
                     'assigned_to_id' => User::where('name', 'Оби Ван Кеноби')->value('id'),
                     'status_id' => TaskStatus::where('name', 'завершена')->value('id'),
                 ],
-
             )
             ->create();
     }
