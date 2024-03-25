@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Feature;
+
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
