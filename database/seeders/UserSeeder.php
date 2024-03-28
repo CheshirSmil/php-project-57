@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             ->count(16)
             ->sequence(
                 [
-                    'name' => 'Автор',
+                    'name' => 'Дуров Павел Валерьевич',
                     'email' => 'test@mail.ru',
                     'password' => '12345678'
                 ],

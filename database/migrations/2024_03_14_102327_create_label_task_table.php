@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('label_task', function (Blueprint $table) {
-            $table->id();
+            //$table->id();
             $table->foreignId('task_id')->constrained('tasks');
             $table->foreignId('label_id')->constrained('labels');
             $table->timestamps();

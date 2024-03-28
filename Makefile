@@ -15,7 +15,7 @@ setup:
 	npm run build
 
 start:
-	php artisan serve
+	php artisan migrate:refresh --seed --force && php artisan serve
 
 install:
 	composer install
