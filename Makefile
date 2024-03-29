@@ -8,7 +8,7 @@ setup:
 
 	php artisan key:gen --ansi
 
-	php artisan migrate:fresh --force --seed
+	php artisan migrate:fresh --seed
 
 	npm ci
 
