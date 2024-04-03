@@ -7,6 +7,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 
+/**
+ * @property array $TaskStatusData
+ * @property array $newTaskStatusData
+ * @property array $updateTaskStatusData
+ */
 class TaskStatusesTest extends TestCase
 {
     use RefreshDatabase;
