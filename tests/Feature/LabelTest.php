@@ -36,7 +36,7 @@ class LabelTest extends TestCase
     {
         $response = $this->get(route('labels.create'));
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testCreate(): void
@@ -50,7 +50,7 @@ class LabelTest extends TestCase
     {
         $response = $this->post(route('labels.store'), $this->labelData);
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testStore(): void
@@ -65,7 +65,7 @@ class LabelTest extends TestCase
     {
         $response = $this->get(route('labels.edit', $this->label));
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testEdit(): void
@@ -79,7 +79,7 @@ class LabelTest extends TestCase
     {
         $response = $this->patch(route('labels.update', $this->label), $this->labelData);
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testUpdate(): void
@@ -95,7 +95,7 @@ class LabelTest extends TestCase
     {
         $response = $this->delete(route('labels.destroy', $this->label));
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testDestroy(): void
