@@ -4,13 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Label;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class LabelTest extends TestCase
 {
-    use DatabaseTransactions;
-
     private User $user;
     private Label $label;
     private array $labelData;

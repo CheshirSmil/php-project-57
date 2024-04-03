@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\TaskStatus;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -14,8 +13,6 @@ use App\Models\User;
  */
 class TaskStatusesTest extends TestCase
 {
-    use RefreshDatabase;
-
     private User $user;
     private TaskStatus $taskStatus;
     private array $taskStatusData;
