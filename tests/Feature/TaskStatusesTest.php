@@ -2,21 +2,17 @@
 
 namespace Tests\Feature;
 
-use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TaskStatusesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     private User $user;
     private TaskStatus $taskStatus;
-    private array $taskStatusData;
 
     protected function setUp(): void
     {
@@ -24,6 +20,12 @@ class TaskStatusesTest extends TestCase
         $this->user = User::factory()->create();
         $this->taskStatus = TaskStatus::factory()->create();
         $this->taskStatusData = TaskStatus::factory()->make()->only([
+            'name',
+        ]);
+        $this->newTaskStatusData = TaskStatus::factory()->make()->only([
+            'name',
+        ]);
+        $this->updateTaskStatusData = TaskStatus::factory()->make()->only([
             'name',
         ]);
     }
@@ -39,7 +41,7 @@ class TaskStatusesTest extends TestCase
     {
         $response = $this->get(route('task_statuses.create'));
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testCreate(): void
@@ -53,12 +55,14 @@ class TaskStatusesTest extends TestCase
     {
         $response = $this->post(route('task_statuses.store'), $this->taskStatusData);
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testStore(): void
     {
-        $response = $this->actingAs($this->user)->post(route('task_statuses.store'), $this->taskStatusData);
+        $response = $this->actingAs($this->user)->post(route('task_statuses.store'), $this->newTaskStatusData);
+
+        $this->assertDatabaseHas('task_statuses', $this->newTaskStatusData);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('task_statuses.index'));
@@ -68,7 +72,7 @@ class TaskStatusesTest extends TestCase
     {
         $response = $this->get(route('task_statuses.edit', $this->taskStatus));
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testEdit(): void
@@ -82,13 +86,15 @@ class TaskStatusesTest extends TestCase
     {
         $response = $this->patch(route('task_statuses.update', $this->taskStatus), $this->taskStatusData);
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testUpdate(): void
     {
-        $response = $this->actingAs($this->user)->put(route('task_statuses.update', $this->taskStatus), $this
-            ->taskStatusData);
+        $response = $this->actingAs($this->user)
+            ->put(route('task_statuses.update', $this->taskStatus), $this->updateTaskStatusData);
+
+        $this->assertDatabaseHas('task_statuses', $this->updateTaskStatusData);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('task_statuses.index'));
@@ -98,16 +104,16 @@ class TaskStatusesTest extends TestCase
     {
         $response = $this->delete(route('task_statuses.destroy', $this->taskStatus));
 
-        $response->assertForbidden();
+        $response->assertStatus(403);
     }
 
     public function testDestroy(): void
     {
         $response = $this->actingAs($this->user)->delete(route('task_statuses.destroy', $this->taskStatus));
 
-        $this->assertModelMissing($this->taskStatus);
-
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('task_statuses.index'));
+
+        $this->assertDatabaseMissing('task_statuses', $this->taskStatus->only('id'));
     }
 }
