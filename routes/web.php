@@ -19,12 +19,9 @@ use App\Http\Controllers\LabelController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('main');
-
 require __DIR__ . '/auth.php';
 
+Route::view('/', 'welcome')->name('welcome');
 Route::resource('task_statuses', TaskStatusController::class);
 Route::resource('tasks', TaskController::class);
 Route::resource('labels', LabelController::class);
