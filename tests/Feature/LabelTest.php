@@ -12,6 +12,9 @@ use Tests\TestCase;
  */
 class LabelTest extends TestCase
 {
+    private User $user;
+    private Label $label;
+
     protected function setUp(): void
     {
         parent::setUp();
