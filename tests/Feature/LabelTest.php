@@ -6,18 +6,24 @@ use App\Models\Label;
 use App\Models\User;
 use Tests\TestCase;
 
+/**
+ * @property array $newLabelData
+ * @property array $updateLabelData
+ */
 class LabelTest extends TestCase
 {
-    private User $user;
-    private Label $label;
-    private array $labelData;
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
         $this->label = Label::factory()->create();
-        $this->labelData = Label::factory()
+        $this->newLabelData = Label::factory()
+            ->make()
+            ->only([
+                'name',
+                'description',
+            ]);
+        $this->updateLabelData = Label::factory()
             ->make()
             ->only([
                 'name',
@@ -48,24 +54,19 @@ class LabelTest extends TestCase
 
     public function testStoreNonAuth(): void
     {
-        $response = $this->post(route('labels.store'), $this->labelData);
+        $response = $this->post(route('labels.store'), $this->newLabelData);
 
         $response->assertStatus(403);
     }
 
     public function testStore(): void
     {
-        $response = $this->actingAs($this->user)->post(route('labels.store'), $this->labelData);
+        $response = $this->actingAs($this->user)->post(route('labels.store'), $this->newLabelData);
+
+        $this->assertDatabaseHas('labels', $this->newLabelData);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('labels.index'));
-    }
-
-    public function testEditNonAuth(): void
-    {
-        $response = $this->get(route('labels.edit', $this->label));
-
-        $response->assertStatus(403);
     }
 
     public function testEdit(): void
@@ -75,9 +76,9 @@ class LabelTest extends TestCase
         $response->assertOk();
     }
 
-    public function testUpdateNonAuth(): void
+    public function testEditNonAuth(): void
     {
-        $response = $this->patch(route('labels.update', $this->label), $this->labelData);
+        $response = $this->get(route('labels.edit', $this->label));
 
         $response->assertStatus(403);
     }
@@ -85,10 +86,19 @@ class LabelTest extends TestCase
     public function testUpdate(): void
     {
         $response = $this->actingAs($this->user)
-            ->patch(route('labels.update', $this->label), $this->labelData);
+            ->patch(route('labels.update', $this->label), $this->updateLabelData);
+
+        $this->assertDatabaseHas('labels', $this->updateLabelData);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('labels.index'));
+    }
+
+    public function testUpdateNonAuth(): void
+    {
+        $response = $this->patch(route('labels.update', $this->label), $this->newLabelData);
+
+        $response->assertStatus(403);
     }
 
     public function testDestroyNonAuth(): void
@@ -100,11 +110,14 @@ class LabelTest extends TestCase
 
     public function testDestroy(): void
     {
-        $response = $this->actingAs($this->user)->delete(route('labels.destroy', $this->label));
+        $this->actingAs(User::factory()->create());
 
-        $this->assertModelMissing($this->label);
+        $model = Label::factory()->create();
+        $response = $this->delete(route('labels.destroy', $model));
 
+        $response->assertRedirect();
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('labels.index'));
+
+        $this->assertDatabaseMissing('labels', ['id' => $model->id]);
     }
 }
