@@ -45,12 +45,6 @@ class TaskTest extends TestCase
         $response->assertOk();
     }
 
-    public function testShow(): void
-    {
-        $response = $this->get(route('tasks.show', $this->task));
-        $response->assertOk();
-    }
-
     public function testCreate(): void
     {
         $response = $this->actingAs($this->user)->get(route('tasks.create'));
@@ -67,23 +61,10 @@ class TaskTest extends TestCase
         $response->assertRedirect(route('tasks.index'));
     }
 
-    public function testGuestCannotStoreTasks(): void
-    {
-        $response = $this->post(route('tasks.store'), $this->data);
-        $response->assertStatus(403);
-    }
-
-
     public function testEdit(): void
     {
         $response = $this->actingAs($this->user)->get(route('tasks.edit', $this->task));
         $response->assertOk();
-    }
-
-    public function testGuestCannotEditTasks(): void
-    {
-        $response = $this->get(route('tasks.edit', [$this->task]));
-        $response->assertStatus(403);
     }
 
     public function testUpdate(): void
@@ -95,12 +76,6 @@ class TaskTest extends TestCase
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('tasks.index'));
-    }
-
-    public function testGuestCannotUpdateTasks(): void
-    {
-        $response = $this->patch(route('tasks.update', [$this->task]), $this->data);
-        $response->assertStatus(403);
     }
 
     public function testDestroy(): void

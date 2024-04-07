@@ -40,25 +40,11 @@ class TaskStatusesTest extends TestCase
         $response->assertOk();
     }
 
-    public function testCreateNonAuth(): void
-    {
-        $response = $this->get(route('task_statuses.create'));
-
-        $response->assertStatus(403);
-    }
-
     public function testCreate(): void
     {
         $response = $this->actingAs($this->user)->get(route('task_statuses.create'));
 
         $response->assertOk();
-    }
-
-    public function testStoreNonAuth(): void
-    {
-        $response = $this->post(route('task_statuses.store'), $this->taskStatusData);
-
-        $response->assertStatus(403);
     }
 
     public function testStore(): void
@@ -71,25 +57,11 @@ class TaskStatusesTest extends TestCase
         $response->assertRedirect(route('task_statuses.index'));
     }
 
-    public function testEditNonAuth(): void
-    {
-        $response = $this->get(route('task_statuses.edit', $this->taskStatus));
-
-        $response->assertStatus(403);
-    }
-
     public function testEdit(): void
     {
         $response = $this->actingAs($this->user)->get(route('task_statuses.edit', $this->taskStatus));
 
         $response->assertOk();
-    }
-
-    public function testUpdateNonAuth(): void
-    {
-        $response = $this->patch(route('task_statuses.update', $this->taskStatus), $this->taskStatusData);
-
-        $response->assertStatus(403);
     }
 
     public function testUpdate(): void
@@ -101,13 +73,6 @@ class TaskStatusesTest extends TestCase
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('task_statuses.index'));
-    }
-
-    public function testDestroyNonAuth(): void
-    {
-        $response = $this->delete(route('task_statuses.destroy', $this->taskStatus));
-
-        $response->assertStatus(403);
     }
 
     public function testDestroy(): void

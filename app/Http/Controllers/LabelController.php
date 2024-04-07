@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLabelRequest;
 use App\Http\Requests\UpdateLabelRequest;
 use App\Models\Label;
+use Illuminate\View\View;
 
 class LabelController extends Controller
 {
@@ -13,9 +14,10 @@ class LabelController extends Controller
      */
     public function __construct()
     {
-        $this->authorizeResource(Label::class, 'label', [
-            'except' => ['index', 'show'],
-        ]);
+        //$this->authorizeResource(Label::class, 'label', [
+            //'except' => ['index', 'show'],
+        //]);
+        $this->middleware('auth')->except('index');
     }
 
     /**

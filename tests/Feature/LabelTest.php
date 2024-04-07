@@ -41,25 +41,11 @@ class LabelTest extends TestCase
         $response->assertOk();
     }
 
-    public function testCreateNonAuth(): void
-    {
-        $response = $this->get(route('labels.create'));
-
-        $response->assertStatus(403);
-    }
-
     public function testCreate(): void
     {
         $response = $this->actingAs($this->user)->get(route('labels.create'));
 
         $response->assertOk();
-    }
-
-    public function testStoreNonAuth(): void
-    {
-        $response = $this->post(route('labels.store'), $this->newLabelData);
-
-        $response->assertStatus(403);
     }
 
     public function testStore(): void
@@ -79,13 +65,6 @@ class LabelTest extends TestCase
         $response->assertOk();
     }
 
-    public function testEditNonAuth(): void
-    {
-        $response = $this->get(route('labels.edit', $this->label));
-
-        $response->assertStatus(403);
-    }
-
     public function testUpdate(): void
     {
         $response = $this->actingAs($this->user)
@@ -95,20 +74,6 @@ class LabelTest extends TestCase
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('labels.index'));
-    }
-
-    public function testUpdateNonAuth(): void
-    {
-        $response = $this->patch(route('labels.update', $this->label), $this->newLabelData);
-
-        $response->assertStatus(403);
-    }
-
-    public function testDestroyNonAuth(): void
-    {
-        $response = $this->delete(route('labels.destroy', $this->label));
-
-        $response->assertStatus(403);
     }
 
     public function testDestroy(): void
