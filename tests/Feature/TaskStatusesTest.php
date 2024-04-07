@@ -22,9 +22,9 @@ class TaskStatusesTest extends TestCase
         parent::setUp();
         $this->user = User::factory()->create();
         $this->taskStatus = TaskStatus::factory()->create();
-        $this->taskStatusData = TaskStatus::factory()->make()->only([
-            'name',
-        ]);
+        //$this->taskStatusData = TaskStatus::factory()->make()->only([
+            //'name',
+        //]);
         $this->newTaskStatusData = TaskStatus::factory()->make()->only([
             'name',
         ]);
