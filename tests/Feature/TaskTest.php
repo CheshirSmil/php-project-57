@@ -12,7 +12,7 @@ use Tests\TestCase;
  */
 class TaskTest extends TestCase
 {
-    private mixed $data;
+    //private mixed $data;
     private User $user;
     private Task $task;
 

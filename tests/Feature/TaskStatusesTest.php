@@ -15,7 +15,7 @@ class TaskStatusesTest extends TestCase
 {
     private User $user;
     private TaskStatus $taskStatus;
-    private array $taskStatusData;
+    //private array $taskStatusData;
 
     protected function setUp(): void
     {
