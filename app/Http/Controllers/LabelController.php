@@ -14,10 +14,8 @@ class LabelController extends Controller
      */
     public function __construct()
     {
-        //$this->authorizeResource(Label::class, 'label', [
-            //'except' => ['index', 'show'],
-        //]);
-        $this->middleware('auth')->except('index');
+        //$this->middleware('auth')->except('index');
+        $this->authorizeResource(Label::class, 'label');
     }
 
     /**
