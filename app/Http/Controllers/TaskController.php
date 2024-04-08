@@ -103,22 +103,16 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $data = $request->validated();
+        $request->validated();
 
-        $task->fill($data)->save();
+        $data = $request->except('labels');
 
-        if (isset($data['labels'])) {
-            if (in_array(null, $data['labels'], true)) {
-                if (count($data['labels']) > 1) {
-                    unset($data['labels'][array_search(null, $data['labels'], true)]);
-                    $task->labels()->sync($data['labels']);
-                } else {
-                    $task->labels()->detach();
-                }
-            } else {
-                $task->labels()->sync($data['labels']);
-            }
-        }
+        $labels = collect($request->input('labels'))
+            ->filter(fn($label) => $label !== null);
+
+        $task->update($data);
+
+        $task->labels()->sync($labels);
 
         session()->flash('success', __('layout.task.flash_update_success'));
 
