@@ -54,7 +54,7 @@
                                 </a>
                             </td>
                             <td class="border border-black dark:border-white p-1">{{ $task->creator->name }}</td>
-                            <td class="border border-black dark:border-white p-1">{{ $task->performer->name ?? '' }} </td>
+                            <td class="border border-black dark:border-white p-1">{{ $task->assignee->name ?? '' }} </td>
                             <td class="border border-black dark:border-white p-1">{{ $task->created_at->format('d.m.Y') }}</td>
 
                             @can('update', $task)
