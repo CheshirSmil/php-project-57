@@ -11,6 +11,7 @@ use App\Models\Label;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -63,24 +64,21 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $data = $request->validated();
-        $task = $request->user()->tasksCreated()->create($data);
+        $createdById = Auth::id();
+        $validation = $request->validated();
+        $data = [...$validation, 'created_by_id' => $createdById];
 
-        if (isset($data['labels'])) {
-            if (in_array(null, $data['labels'], true)) {
-                if (count($data['labels']) > 1) {
-                    unset($data['labels'][array_search(null, $data['labels'], true)]);
-                    $task->labels()->attach($data['labels']);
-                }
-            } else {
-                $task->labels()->attach($data['labels']);
-            }
+        $task = new Task();
+        $task->fill($data);
+        $task->save();
+
+        if (array_key_exists('labels', $validation)) {
+            $task->labels()->attach($validation['labels']);
         }
 
         session()->flash('success', __('layout.task.flash_create_success'));
+        return redirect()->route('tasks.index');
 
-        return redirect()
-            ->route('tasks.index');
     }
 
     /**
