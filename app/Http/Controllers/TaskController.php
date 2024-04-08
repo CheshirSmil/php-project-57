@@ -64,7 +64,7 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $data = $request->validated();
-        $task = $request->user()->tasks()->create($data);
+        $task = $request->user()->tasksCreated()->create($data);
 
         if (isset($data['labels'])) {
             if (in_array(null, $data['labels'], true)) {
