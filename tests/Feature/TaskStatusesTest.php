@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\TaskStatus;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Task;
 
 /**
  * @property array $TaskStatusData
@@ -22,6 +23,7 @@ class TaskStatusesTest extends TestCase
         parent::setUp();
         $this->user = User::factory()->create();
         $this->taskStatus = TaskStatus::factory()->create();
+        $this->actingAs($this->user);
         //$this->taskStatusData = TaskStatus::factory()->make()->only([
             //'name',
         //]);
@@ -83,5 +85,15 @@ class TaskStatusesTest extends TestCase
         $response->assertRedirect(route('task_statuses.index'));
 
         $this->assertDatabaseMissing('task_statuses', $this->taskStatus->only('id'));
+    }
+
+    public function testDeleteIfLinkWithTask(): void
+    {
+        Task::factory()->create(['status_id' => $this->taskStatus->id]);
+
+        $response = $this->delete(route('task_statuses.destroy', ['task_status' => $this->taskStatus]));
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('task_statuses', ['id' => $this->taskStatus->id]);
     }
 }
