@@ -7,13 +7,10 @@ use App\Models\User;
 use Tests\TestCase;
 use App\Models\Task;
 
-
-/**
- * @property array $newLabelData
- * @property array $updateLabelData
- */
 class LabelTest extends TestCase
 {
+    private array $newLabelData;
+    private array $updateLabelData;
     private User $user;
     private Label $label;
     private Task $task;
