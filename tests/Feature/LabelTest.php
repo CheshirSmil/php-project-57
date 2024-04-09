@@ -52,10 +52,10 @@ class LabelTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post(route('labels.store'), $this->newLabelData);
 
-        $this->assertDatabaseHas('labels', $this->newLabelData);
-
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('labels.index'));
+
+        $this->assertDatabaseHas('labels', $this->newLabelData);
     }
 
     public function testEdit(): void
