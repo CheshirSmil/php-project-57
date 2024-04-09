@@ -6,13 +6,10 @@ use App\Models\Task;
 use App\Models\User;
 use Tests\TestCase;
 
-/**
- * @property array $newTaskData
- * @property array $updateTaskData
- */
 class TaskTest extends TestCase
 {
-    //private mixed $data;
+    private array $newTaskData;
+    private array $updateTaskData;
     private User $user;
     private Task $task;
 
@@ -21,7 +18,6 @@ class TaskTest extends TestCase
         parent::setUp();
         $this->seed();
         $this->user = User::factory()->create();
-        //$this->data = Task::factory()->make()->only('name', 'description', 'status_id', 'assigned_to_id');
         $this->task = Task::factory([
             'created_by_id' => $this->user->id,
         ])->create();
