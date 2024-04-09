@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Label;
 use App\Models\User;
 use Tests\TestCase;
+use App\Models\Task;
+
 
 /**
  * @property array $newLabelData
@@ -14,12 +16,18 @@ class LabelTest extends TestCase
 {
     private User $user;
     private Label $label;
+    private Task $task;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->seed();
         $this->user = User::factory()->create();
+        $this->task = Task::factory([
+            'created_by_id' => $this->user->id,
+        ])->create();
         $this->label = Label::factory()->create();
+
         $this->newLabelData = Label::factory()
             ->make()
             ->only([
@@ -87,5 +95,18 @@ class LabelTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseMissing('labels', ['id' => $model->id]);
+    }
+
+    public function testDeleteIfLinkWithTask(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        $model = Label::factory()->create();
+        $this->task->labels()->attach(['label' => $this->label->id]);
+
+        $response = $this->delete(route('labels.destroy', ['label' => $model->id]));
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('labels', ['id' => $this->label->id]);
     }
 }
