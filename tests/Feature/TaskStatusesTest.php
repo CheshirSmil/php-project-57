@@ -7,16 +7,12 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Task;
 
-/**
- * @property array $TaskStatusData
- * @property array $newTaskStatusData
- * @property array $updateTaskStatusData
- */
 class TaskStatusesTest extends TestCase
 {
     private User $user;
     private TaskStatus $taskStatus;
-    //private array $taskStatusData;
+    private array $newTaskStatusData;
+    private array $updateTaskStatusData;
 
     protected function setUp(): void
     {
@@ -24,9 +20,6 @@ class TaskStatusesTest extends TestCase
         $this->user = User::factory()->create();
         $this->taskStatus = TaskStatus::factory()->create();
         $this->actingAs($this->user);
-        //$this->taskStatusData = TaskStatus::factory()->make()->only([
-            //'name',
-        //]);
         $this->newTaskStatusData = TaskStatus::factory()->make()->only([
             'name',
         ]);
